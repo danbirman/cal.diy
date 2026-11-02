@@ -18,7 +18,7 @@ import { TimezoneSelect } from "@calcom/web/modules/timezone/components/Timezone
 import TravelScheduleModal from "@components/settings/TravelScheduleModal";
 import { revalidateSettingsGeneral } from "app/(use-page-wrapper)/settings/(settings-layout)/my-account/general/actions";
 import { useSession } from "next-auth/react";
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 export type FormValues = {
@@ -49,6 +49,7 @@ interface GeneralViewProps {
 }
 
 const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
+  const formId = useId();
   const localeProp = user.locale ?? "en";
   const utils = trpc.useContext();
   const {
@@ -156,6 +157,7 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
     <SettingsHeader title={t("general")} description={t("general_description")} borderInShellHeader={false}>
       <div className="mt-6 grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
         <Form
+          id={formId}
           className="min-w-0"
           form={formMethods}
           handleSubmit={async (values) => {
@@ -167,7 +169,7 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
               weekStart: values.weekStart.value,
             });
           }}>
-          <div className="border-subtle rounded-t-lg border border-b-0 px-4 py-6 sm:px-6">
+          <div className="border-subtle rounded-lg border px-4 py-6 sm:px-6">
             <Controller
               name="locale"
               render={({ field: { value, onChange } }) => (
@@ -322,18 +324,6 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
               )}
             />
           </div>
-
-          <SectionBottomActions align="end">
-            <Button
-              className="bg-[#ff7b00] text-white shadow-none not-disabled:hover:bg-[#ff7b00] not-disabled:hover:shadow-none not-disabled:active:shadow-none"
-              loading={isUpdateBtnLoading}
-              disabled={isDisabled}
-              color="primary"
-              type="submit"
-              data-testid="general-submit-button">
-              <>{t("update")}</>
-            </Button>
-          </SectionBottomActions>
         </Form>
 
         <div className="flex min-w-0 flex-col gap-4">
@@ -386,6 +376,18 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
             }}
           />
         </div>
+        <SectionBottomActions align="end" className="rounded-lg lg:col-span-2">
+          <Button
+            className="bg-[#ff7b00] text-white shadow-none not-disabled:hover:bg-[#ff7b00] not-disabled:hover:shadow-none not-disabled:active:shadow-none"
+            loading={isUpdateBtnLoading}
+            disabled={isDisabled}
+            color="primary"
+            type="submit"
+            form={formId}
+            data-testid="general-submit-button">
+            <>{t("update")}</>
+          </Button>
+        </SectionBottomActions>
         <TravelScheduleModal
           open={isTZScheduleOpen}
           onOpenChange={setIsTZScheduleOpen}
