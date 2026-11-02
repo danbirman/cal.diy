@@ -325,6 +325,7 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
 
           <SectionBottomActions align="end">
             <Button
+              className="bg-[#ff7b00] text-white shadow-none not-disabled:hover:bg-[#ff7b00] not-disabled:hover:shadow-none not-disabled:active:shadow-none"
               loading={isUpdateBtnLoading}
               disabled={isDisabled}
               color="primary"
