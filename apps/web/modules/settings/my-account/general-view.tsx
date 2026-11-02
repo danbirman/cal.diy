@@ -153,9 +153,10 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
   const watchedTzSchedules = formMethods.watch("travelSchedules");
 
   return (
-    <SettingsHeader title={t("general")} description={t("general_description")} borderInShellHeader={true}>
-      <div>
+    <SettingsHeader title={t("general")} description={t("general_description")} borderInShellHeader={false}>
+      <div className="mt-6 grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
         <Form
+          className="min-w-0"
           form={formMethods}
           handleSubmit={async (values) => {
             setIsUpdateBtnLoading(true);
@@ -166,7 +167,7 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
               weekStart: values.weekStart.value,
             });
           }}>
-          <div className="border-subtle border-x border-y-0 px-4 py-8 sm:px-6">
+          <div className="border-subtle rounded-t-lg border border-b-0 px-4 py-6 sm:px-6">
             <Controller
               name="locale"
               render={({ field: { value, onChange } }) => (
@@ -192,8 +193,8 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
                   <Label className="text-emphasis mt-6">
                     <>{t("timezone")}</>
                   </Label>
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-                    <div className="w-full sm:w-1/2">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end lg:flex-col lg:items-stretch">
+                    <div className="w-full sm:w-1/2 lg:w-full">
                       <TimezoneSelect
                         id="timezone"
                         value={value}
@@ -207,7 +208,7 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
                     </div>
                     {!watchedTzSchedules.length && (
                       <Button
-                        className="w-full sm:w-1/2"
+                        className="w-full sm:w-1/2 lg:w-full"
                         color="secondary"
                         StartIcon="calendar"
                         onClick={() => setIsTZScheduleOpen(true)}>
@@ -281,7 +282,11 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
                     <>{t("time_format")}</>
                   </Label>
                   <Select
-                    value={timeFormatOptions.find((option) => option.value === (typeof value === "object" ? value?.value : value)) || value}
+                    value={
+                      timeFormatOptions.find(
+                        (option) => option.value === (typeof value === "object" ? value?.value : value)
+                      ) || value
+                    }
                     options={timeFormatOptions}
                     onChange={(event) => {
                       if (event) formMethods.setValue("timeFormat", { ...event }, { shouldDirty: true });
@@ -303,7 +308,11 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
                     <>{t("start_of_week")}</>
                   </Label>
                   <Select
-                    value={weekStartOptions.find((option) => option.value === (typeof value === "object" ? value?.value : value)) || value}
+                    value={
+                      weekStartOptions.find(
+                        (option) => option.value === (typeof value === "object" ? value?.value : value)
+                      ) || value
+                    }
                     options={weekStartOptions}
                     onChange={(event) => {
                       if (event) formMethods.setValue("weekStart", { ...event }, { shouldDirty: true });
@@ -326,58 +335,56 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
           </SectionBottomActions>
         </Form>
 
-        <SettingsToggle
-          toggleSwitchAtTheEnd={true}
-          title={t("dynamic_booking")}
-          description={t("allow_dynamic_booking")}
-          disabled={mutation.isPending}
-          checked={isAllowDynamicBookingChecked}
-          onCheckedChange={(checked) => {
-            setIsAllowDynamicBookingChecked(checked);
-            mutation.mutate({ allowDynamicBooking: checked });
-          }}
-          switchContainerClassName="mt-6"
-        />
+        <div className="flex min-w-0 flex-col gap-4">
+          <SettingsToggle
+            toggleSwitchAtTheEnd={true}
+            title={t("dynamic_booking")}
+            description={t("allow_dynamic_booking")}
+            disabled={mutation.isPending}
+            checked={isAllowDynamicBookingChecked}
+            onCheckedChange={(checked) => {
+              setIsAllowDynamicBookingChecked(checked);
+              mutation.mutate({ allowDynamicBooking: checked });
+            }}
+          />
 
-        <SettingsToggle
-          data-testid="my-seo-indexing-switch"
-          toggleSwitchAtTheEnd={true}
-          title={t("seo_indexing")}
-          description={t("allow_seo_indexing")}
-          disabled={mutation.isPending || user.organizationSettings?.allowSEOIndexing === false}
-          checked={isAllowSEOIndexingChecked}
-          onCheckedChange={(checked) => {
-            setIsAllowSEOIndexingChecked(checked);
-            mutation.mutate({ allowSEOIndexing: checked });
-          }}
-          switchContainerClassName="mt-6"
-        />
+          <SettingsToggle
+            data-testid="my-seo-indexing-switch"
+            toggleSwitchAtTheEnd={true}
+            title={t("seo_indexing")}
+            description={t("allow_seo_indexing")}
+            disabled={mutation.isPending || user.organizationSettings?.allowSEOIndexing === false}
+            checked={isAllowSEOIndexingChecked}
+            onCheckedChange={(checked) => {
+              setIsAllowSEOIndexingChecked(checked);
+              mutation.mutate({ allowSEOIndexing: checked });
+            }}
+          />
 
-        <SettingsToggle
-          toggleSwitchAtTheEnd={true}
-          title={t("monthly_digest_email")}
-          description={t("monthly_digest_email")}
-          disabled={mutation.isPending}
-          checked={isReceiveMonthlyDigestEmailChecked}
-          onCheckedChange={(checked) => {
-            setIsReceiveMonthlyDigestEmailChecked(checked);
-            mutation.mutate({ receiveMonthlyDigestEmail: checked });
-          }}
-          switchContainerClassName="mt-6"
-        />
+          <SettingsToggle
+            toggleSwitchAtTheEnd={true}
+            title={t("monthly_digest_email")}
+            description={t("monthly_digest_email")}
+            disabled={mutation.isPending}
+            checked={isReceiveMonthlyDigestEmailChecked}
+            onCheckedChange={(checked) => {
+              setIsReceiveMonthlyDigestEmailChecked(checked);
+              mutation.mutate({ receiveMonthlyDigestEmail: checked });
+            }}
+          />
 
-        <SettingsToggle
-          toggleSwitchAtTheEnd={true}
-          title={t("require_booker_email_verification")}
-          description={t("require_booker_email_verification_description")}
-          disabled={mutation.isPending}
-          checked={isRequireBookerEmailVerificationChecked}
-          onCheckedChange={(checked) => {
-            setIsRequireBookerEmailVerificationChecked(checked);
-            mutation.mutate({ requiresBookerEmailVerification: checked });
-          }}
-          switchContainerClassName="mt-6"
-        />
+          <SettingsToggle
+            toggleSwitchAtTheEnd={true}
+            title={t("require_booker_email_verification")}
+            description={t("require_booker_email_verification_description")}
+            disabled={mutation.isPending}
+            checked={isRequireBookerEmailVerificationChecked}
+            onCheckedChange={(checked) => {
+              setIsRequireBookerEmailVerificationChecked(checked);
+              mutation.mutate({ requiresBookerEmailVerification: checked });
+            }}
+          />
+        </div>
         <TravelScheduleModal
           open={isTZScheduleOpen}
           onOpenChange={setIsTZScheduleOpen}
