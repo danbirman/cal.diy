@@ -154,7 +154,7 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
   const watchedTzSchedules = formMethods.watch("travelSchedules");
 
   return (
-    <SettingsHeader title={t("general")} description={t("general_description")} borderInShellHeader={true}>
+    <SettingsHeader title={t("general")} description={t("general_description")} borderInShellHeader={false}>
       <div className="mt-6 grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
         <Form
           id={formId}
@@ -195,8 +195,8 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
                   <Label className="text-emphasis mt-6">
                     <>{t("timezone")}</>
                   </Label>
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-                    <div className="w-full sm:w-1/2">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end lg:flex-col lg:items-stretch">
+                    <div className="w-full sm:w-1/2 lg:w-full">
                       <TimezoneSelect
                         id="timezone"
                         value={value}
@@ -210,7 +210,7 @@ const GeneralView = ({ user, travelSchedules }: GeneralViewProps) => {
                     </div>
                     {!watchedTzSchedules.length && (
                       <Button
-                        className="w-full sm:w-1/2"
+                        className="w-full sm:w-1/2 lg:w-full"
                         color="secondary"
                         StartIcon="calendar"
                         onClick={() => setIsTZScheduleOpen(true)}>
